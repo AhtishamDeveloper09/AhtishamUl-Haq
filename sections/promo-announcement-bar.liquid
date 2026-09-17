@@ -1,0 +1,433 @@
+{%- comment -%}
+  Section: Promo Announcement Bar
+  ------------------------------------------------------------------
+  A fully dynamic announcement/promo bar for the Dawn theme header
+  group. Everything visible (logo text, message, button label/link,
+  colors) is schema-driven so merchants can edit it in the theme
+  editor with no code changes.
+
+  Desktop  : logo (left) — message (center) — CTA button (right)
+  Mobile   : logo + hamburger toggle. Tapping the toggle smoothly
+             slides a drawer open/closed (top-to-bottom) revealing
+             the message + button. The hamburger icon morphs into
+             an "X" using CSS transforms — no icon swapping needed.
+
+  Add to header group: this section has "enabled_on: header", so it
+  can be added directly inside Header group in the theme editor
+  (Theme settings > Header group > Add section).
+{%- endcomment -%}
+
+{%- liquid
+  assign section_id = section.id
+  assign bg_color = section.settings.background_color
+  assign text_color = section.settings.text_color
+  assign btn_bg = section.settings.button_background
+  assign btn_text = section.settings.button_text_color
+  assign btn_hover_bg = section.settings.button_hover_background
+  assign btn_hover_text = section.settings.button_hover_text_color
+-%}
+
+<div
+  class="promo-bar"
+  id="PromoBar-{{ section_id }}"
+  style="
+    --promo-bg: {{ bg_color }};
+    --promo-text: {{ text_color }};
+    --promo-btn-bg: {{ btn_bg }};
+    --promo-btn-text: {{ btn_text }};
+    --promo-btn-hover-bg: {{ btn_hover_bg }};
+    --promo-btn-hover-text: {{ btn_hover_text }};
+  "
+>
+  {%- comment -%} Main bar row: logo / message / button (desktop) — logo / toggle (mobile) {%- endcomment -%}
+  <div class="promo-bar__row page-width">
+
+    <div class="promo-bar__logo">
+      {%- if section.settings.logo_text != blank -%}
+        <a href="{{ routes.root_url }}" class="promo-bar__logo-link">{{ section.settings.logo_text }}</a>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} Desktop-only center message {%- endcomment -%}
+    {%- if section.settings.center_text != blank -%}
+      <p class="promo-bar__message promo-bar__message--desktop">{{ section.settings.center_text }}</p>
+    {%- endif -%}
+
+    {%- comment -%} Desktop-only CTA button {%- endcomment -%}
+    {%- if section.settings.button_text != blank -%}
+      <a
+        {% if section.settings.button_link != blank %}href="{{ section.settings.button_link }}"{% else %}role="link" aria-disabled="true"{% endif %}
+        class="promo-bar__button promo-bar__button--desktop"
+      >
+        <span class="promo-bar__button-label">{{ section.settings.button_text }}</span>
+        {%- render 'promo-bar-arrow-icon' -%}
+      </a>
+    {%- endif -%}
+
+    {%- comment -%} Mobile-only hamburger / close toggle {%- endcomment -%}
+    <button
+      type="button"
+      class="promo-bar__toggle"
+      id="PromoBarToggle-{{ section_id }}"
+      aria-expanded="false"
+      aria-controls="PromoBarDrawer-{{ section_id }}"
+      aria-label="{{ 'general.accessibility.toggle_promo_bar' | t | default: 'Toggle promo bar' }}"
+    >
+      <span class="promo-bar__toggle-icon" aria-hidden="true">
+        <span class="promo-bar__toggle-line promo-bar__toggle-line--top"></span>
+        <span class="promo-bar__toggle-line promo-bar__toggle-line--middle"></span>
+        <span class="promo-bar__toggle-line promo-bar__toggle-line--bottom"></span>
+      </span>
+    </button>
+  </div>
+
+  {%- comment -%}
+    Mobile drawer. Uses the CSS grid-template-rows "0fr -> 1fr" trick
+    so the slide-open/close animation is smooth without JS having to
+    measure/set pixel heights.
+  {%- endcomment -%}
+  <div class="promo-bar__drawer" id="PromoBarDrawer-{{ section_id }}">
+    <div class="promo-bar__drawer-inner">
+      <div class="promo-bar__drawer-content page-width">
+        {%- if section.settings.center_text != blank -%}
+          <p class="promo-bar__message promo-bar__message--mobile">{{ section.settings.center_text }}</p>
+        {%- endif -%}
+
+        {%- if section.settings.button_text != blank -%}
+          <a
+            {% if section.settings.button_link != blank %}href="{{ section.settings.button_link }}"{% else %}role="link" aria-disabled="true"{% endif %}
+            class="promo-bar__button promo-bar__button--mobile"
+          >
+            <span class="promo-bar__button-label">{{ section.settings.button_text }}</span>
+            {%- render 'promo-bar-arrow-icon' -%}
+          </a>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{%- style -%}
+  /* ==========================================================
+     Promo Announcement Bar — base + desktop
+     ========================================================== */
+  #PromoBar-{{ section_id }} {
+    background: var(--promo-bg);
+    color: var(--promo-text);
+  }
+
+  #PromoBar-{{ section_id }} .promo-bar__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding-top: 1.4rem;
+    padding-bottom: 1.4rem;
+    position: relative;
+  }
+
+  #PromoBar-{{ section_id }} .promo-bar__logo-link {
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-size: 1.5rem;
+    color: var(--promo-text);
+    text-decoration: none;
+  }
+
+  /* Center message is absolutely centered on desktop regardless of logo/button width */
+  #PromoBar-{{ section_id }} .promo-bar__message--desktop {
+    display: none;
+    margin: 0;
+    font-size: 1.4rem;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    white-space: nowrap;
+  }
+
+  /* CTA button with left-to-right fill hover effect */
+  #PromoBar-{{ section_id }} .promo-bar__button {
+    position: relative;
+    display: none;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 1rem 1.8rem;
+    background: var(--promo-btn-bg);
+    color: var(--promo-btn-text);
+    font-size: 1.3rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    overflow: hidden;
+    isolation: isolate; /* keeps ::before fill under the text/icon */
+    transition: color 0.35s ease;
+  }
+
+  /* The sliding fill: scales in from the left on hover/focus */
+  #PromoBar-{{ section_id }} .promo-bar__button::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--promo-btn-hover-bg);
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 0.4s ease;
+    z-index: -1;
+  }
+
+  #PromoBar-{{ section_id }} .promo-bar__button:hover,
+  #PromoBar-{{ section_id }} .promo-bar__button:focus-visible {
+    color: var(--promo-btn-hover-text);
+  }
+
+  #PromoBar-{{ section_id }} .promo-bar__button:hover::before,
+  #PromoBar-{{ section_id }} .promo-bar__button:focus-visible::before {
+    transform: scaleX(1);
+  }
+
+  #PromoBar-{{ section_id }} .promo-bar__button svg {
+    width: 1.6rem;
+    height: 1.6rem;
+    flex-shrink: 0;
+    transition: transform 0.35s ease;
+  }
+
+  #PromoBar-{{ section_id }} .promo-bar__button:hover svg,
+  #PromoBar-{{ section_id }} .promo-bar__button:focus-visible svg {
+    transform: translateX(4px);
+  }
+
+  /* Mobile hamburger / close toggle, hidden on desktop */
+  #PromoBar-{{ section_id }} .promo-bar__toggle {
+    display: none;
+    background: transparent;
+    border: 0;
+    padding: 0.5rem;
+    cursor: pointer;
+    color: var(--promo-text);
+  }
+
+  #PromoBar-{{ section_id }} .promo-bar__toggle-icon {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 2.2rem;
+    height: 1.6rem;
+  }
+
+  #PromoBar-{{ section_id }} .promo-bar__toggle-line {
+    display: block;
+    height: 2px;
+    width: 100%;
+    background: currentColor;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    transform-origin: center;
+  }
+
+  /* Hamburger -> X morph, driven by aria-expanded so it stays in sync with state */
+  #PromoBar-{{ section_id }} .promo-bar__toggle[aria-expanded="true"] .promo-bar__toggle-line--top {
+    transform: translateY(7px) rotate(45deg);
+  }
+  #PromoBar-{{ section_id }} .promo-bar__toggle[aria-expanded="true"] .promo-bar__toggle-line--middle {
+    opacity: 0;
+  }
+  #PromoBar-{{ section_id }} .promo-bar__toggle[aria-expanded="true"] .promo-bar__toggle-line--bottom {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  /* Drawer: closed by default via 0fr row, opened by JS toggling .is-open */
+  #PromoBar-{{ section_id }} .promo-bar__drawer {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.4s ease;
+  }
+
+  #PromoBar-{{ section_id }} .promo-bar__drawer.is-open {
+    grid-template-rows: 1fr;
+  }
+
+  #PromoBar-{{ section_id }} .promo-bar__drawer-inner {
+    overflow: hidden;
+    min-height: 0;
+  }
+
+  #PromoBar-{{ section_id }} .promo-bar__drawer-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.2rem;
+    padding-top: 1.2rem;
+    padding-bottom: 1.6rem;
+  }
+
+  #PromoBar-{{ section_id }} .promo-bar__message--mobile {
+    margin: 0;
+    font-size: 1.4rem;
+  }
+
+  /* ==========================================================
+     Breakpoint: show desktop layout, hide mobile toggle/drawer
+     ========================================================== */
+  @media screen and (min-width: 750px) {
+    #PromoBar-{{ section_id }} .promo-bar__message--desktop,
+    #PromoBar-{{ section_id }} .promo-bar__button--desktop {
+      display: flex;
+    }
+
+    #PromoBar-{{ section_id }} .promo-bar__toggle,
+    #PromoBar-{{ section_id }} .promo-bar__drawer {
+      display: none;
+    }
+  }
+
+  /* Below the breakpoint, show the mobile toggle + drawer */
+  @media screen and (max-width: 749px) {
+    #PromoBar-{{ section_id }} .promo-bar__toggle {
+      display: inline-flex;
+      align-items: center;
+    }
+
+    #PromoBar-{{ section_id }} .promo-bar__button--mobile {
+      display: inline-flex;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #PromoBar-{{ section_id }} .promo-bar__drawer,
+    #PromoBar-{{ section_id }} .promo-bar__button::before,
+    #PromoBar-{{ section_id }} .promo-bar__button svg,
+    #PromoBar-{{ section_id }} .promo-bar__toggle-line {
+      transition: none;
+    }
+  }
+{%- endstyle -%}
+
+<script>
+  /**
+   * Promo Announcement Bar — mobile drawer toggle.
+   * Scoped to this section instance only (by section id) so multiple
+   * instances on a page, or re-renders from the theme editor, never
+   * clash or double-bind.
+   */
+  (function () {
+    var sectionId = {{ section_id | json }};
+    var toggle = document.getElementById('PromoBarToggle-' + sectionId);
+    var drawer = document.getElementById('PromoBarDrawer-' + sectionId);
+
+    if (!toggle || !drawer) return;
+
+    function setOpen(isOpen) {
+      toggle.setAttribute('aria-expanded', isOpen);
+      drawer.classList.toggle('is-open', isOpen);
+    }
+
+    toggle.addEventListener('click', function () {
+      var isOpen = toggle.getAttribute('aria-expanded') === 'true';
+      setOpen(!isOpen);
+    });
+
+    // Keep state in sync if the section is reloaded in the theme editor.
+    document.addEventListener('shopify:section:load', function (event) {
+      if (event.target.querySelector('#PromoBar-' + sectionId)) {
+        setOpen(false);
+      }
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Promo Announcement Bar",
+  "tag": "section",
+  "class": "section-promo-announcement-bar",
+  "enabled_on": {
+    "groups": ["header"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Logo"
+    },
+    {
+      "type": "text",
+      "id": "logo_text",
+      "label": "Logo text",
+      "default": "TISSO VISON"
+    },
+    {
+      "type": "header",
+      "content": "Message"
+    },
+    {
+      "type": "text",
+      "id": "center_text",
+      "label": "Message text",
+      "default": "Find the ideal gift for your loved ones."
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button label",
+      "default": "Choose Gift"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#f2f2f2"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "color",
+      "id": "button_background",
+      "label": "Button background",
+      "default": "#f4e04d"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text color",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_background",
+      "label": "Button hover background",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_text_color",
+      "label": "Button hover text color",
+      "default": "#ffffff"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Promo Announcement Bar"
+    }
+  ]
+}
+{% endschema %}
