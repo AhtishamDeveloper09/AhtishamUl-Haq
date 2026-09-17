@@ -1,129 +1,3 @@
-{%- comment -%}
-  Section: Promo Announcement Bar
-  ------------------------------------------------------------------
-  A fully dynamic announcement/promo bar for the Dawn theme header
-  group. Everything visible (logo text, message, button label/link,
-  colors) is schema-driven so merchants can edit it in the theme
-  editor with no code changes.
-
-  Desktop  : logo (left) — message (center) — CTA button (right)
-  Mobile   : logo + hamburger toggle. Tapping the toggle smoothly
-             slides a drawer open/closed (top-to-bottom) revealing
-             the message + button. The hamburger icon morphs into
-             an "X" using CSS transforms — no icon swapping needed.
-
-  Add to header group: this section has "enabled_on: header", so it
-  can be added directly inside Header group in the theme editor
-  (Theme settings > Header group > Add section).
-{%- endcomment -%}
-
-{%- liquid
-  assign section_id = section.id
-  assign bg_color = section.settings.background_color
-  assign text_color = section.settings.text_color
-  assign btn_bg = section.settings.button_background
-  assign btn_text = section.settings.button_text_color
-  assign btn_hover_bg = section.settings.button_hover_background
-  assign btn_hover_text = section.settings.button_hover_text_color
--%}
-
-<div
-  class="promo-bar"
-  id="PromoBar-{{ section_id }}"
-  style="
-    --promo-bg: {{ bg_color }};
-    --promo-text: {{ text_color }};
-    --promo-btn-bg: {{ btn_bg }};
-    --promo-btn-text: {{ btn_text }};
-    --promo-btn-hover-bg: {{ btn_hover_bg }};
-    --promo-btn-hover-text: {{ btn_hover_text }};
-  "
->
-  {%- comment -%} Main bar row: logo / message / button (desktop) — logo / toggle (mobile) {%- endcomment -%}
-  <div class="promo-bar__row page-width">
-    <div class="promo-bar__logo">
-      {%- if section.settings.logo_text != blank -%}
-        <a href="{{ routes.root_url }}" class="promo-bar__logo-link">{{ section.settings.logo_text }}</a>
-      {%- endif -%}
-    </div>
-
-    {%- comment -%} Desktop-only center message {%- endcomment -%}
-    {%- if section.settings.center_text != blank -%}
-      <p class="promo-bar__message promo-bar__message--desktop">{{ section.settings.center_text }}</p>
-    {%- endif -%}
-
-    {%- comment -%} Desktop-only CTA button {%- endcomment -%}
-    {%- if section.settings.button_text != blank -%}
-      <a
-        {% if section.settings.button_link != blank %}
-          href="{{ section.settings.button_link }}"
-        {% else %}
-          role="link" aria-disabled="true"
-        {% endif %}
-        class="promo-bar__button promo-bar__button--desktop"
-      >
-        <span class="promo-bar__button-label">{{ section.settings.button_text }}</span>
-        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" focusable="false" aria-hidden="true">
-          <path d="M4 12H20M20 12L14 6M20 12L14 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </a>
-    {%- endif -%}
-
-    {%- comment -%} Mobile-only hamburger / close toggle {%- endcomment -%}
-    <button
-      type="button"
-      class="promo-bar__toggle"
-      id="PromoBarToggle-{{ section_id }}"
-      aria-expanded="false"
-      aria-controls="PromoBarDrawer-{{ section_id }}"
-      aria-label="{{ 'general.accessibility.toggle_promo_bar' | t | default: 'Toggle promo bar' }}"
-    >
-      <span class="promo-bar__toggle-icon" aria-hidden="true">
-        <span class="promo-bar__toggle-line promo-bar__toggle-line--top"></span>
-        <span class="promo-bar__toggle-line promo-bar__toggle-line--middle"></span>
-        <span class="promo-bar__toggle-line promo-bar__toggle-line--bottom"></span>
-      </span>
-    </button>
-  </div>
-
-  {%- comment -%}
-    Mobile drawer. Uses the CSS grid-template-rows "0fr -> 1fr" trick
-    so the slide-open/close animation is smooth without JS having to
-    measure/set pixel heights.
-  {%- endcomment -%}
-  <div class="promo-bar__drawer" id="PromoBarDrawer-{{ section_id }}">
-    <div class="promo-bar__drawer-inner">
-      <div class="promo-bar__drawer-content page-width">
-        {%- if section.settings.center_text != blank -%}
-          <p class="promo-bar__message promo-bar__message--mobile">{{ section.settings.center_text }}</p>
-        {%- endif -%}
-
-        {%- if section.settings.button_text != blank -%}
-          <a
-            {% if section.settings.button_link != blank %}
-              href="{{ section.settings.button_link }}"
-            {% else %}
-              role="link" aria-disabled="true"
-            {% endif %}
-            class="promo-bar__button promo-bar__button--mobile"
-          >
-            <span class="promo-bar__button-label">{{ section.settings.button_text }}</span>
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              focusable="false"
-              aria-hidden="true"
-            >
-              <path d="M4 12H20M20 12L14 6M20 12L14 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </a>
-        {%- endif -%}
-      </div>
-    </div>
-  </div>
-</div>
-
 {%- style -%}
   /* ==========================================================
      Promo Announcement Bar — base + desktop
@@ -334,6 +208,132 @@
     }
   }
 {%- endstyle -%}
+
+{%- comment -%}
+  Section: Promo Announcement Bar
+  ------------------------------------------------------------------
+  A fully dynamic announcement/promo bar for the Dawn theme header
+  group. Everything visible (logo text, message, button label/link,
+  colors) is schema-driven so merchants can edit it in the theme
+  editor with no code changes.
+
+  Desktop  : logo (left) — message (center) — CTA button (right)
+  Mobile   : logo + hamburger toggle. Tapping the toggle smoothly
+             slides a drawer open/closed (top-to-bottom) revealing
+             the message + button. The hamburger icon morphs into
+             an "X" using CSS transforms — no icon swapping needed.
+
+  Add to header group: this section has "enabled_on: header", so it
+  can be added directly inside Header group in the theme editor
+  (Theme settings > Header group > Add section).
+{%- endcomment -%}
+
+{%- liquid
+  assign section_id = section.id
+  assign bg_color = section.settings.background_color
+  assign text_color = section.settings.text_color
+  assign btn_bg = section.settings.button_background
+  assign btn_text = section.settings.button_text_color
+  assign btn_hover_bg = section.settings.button_hover_background
+  assign btn_hover_text = section.settings.button_hover_text_color
+-%}
+
+<div
+  class="promo-bar"
+  id="PromoBar-{{ section_id }}"
+  style="
+    --promo-bg: {{ bg_color }};
+    --promo-text: {{ text_color }};
+    --promo-btn-bg: {{ btn_bg }};
+    --promo-btn-text: {{ btn_text }};
+    --promo-btn-hover-bg: {{ btn_hover_bg }};
+    --promo-btn-hover-text: {{ btn_hover_text }};
+  "
+>
+  {%- comment -%} Main bar row: logo / message / button (desktop) — logo / toggle (mobile) {%- endcomment -%}
+  <div class="promo-bar__row page-width">
+    <div class="promo-bar__logo">
+      {%- if section.settings.logo_text != blank -%}
+        <a href="{{ routes.root_url }}" class="promo-bar__logo-link">{{ section.settings.logo_text }}</a>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} Desktop-only center message {%- endcomment -%}
+    {%- if section.settings.center_text != blank -%}
+      <p class="promo-bar__message promo-bar__message--desktop">{{ section.settings.center_text }}</p>
+    {%- endif -%}
+
+    {%- comment -%} Desktop-only CTA button {%- endcomment -%}
+    {%- if section.settings.button_text != blank -%}
+      <a
+        {% if section.settings.button_link != blank %}
+          href="{{ section.settings.button_link }}"
+        {% else %}
+          role="link" aria-disabled="true"
+        {% endif %}
+        class="promo-bar__button promo-bar__button--desktop"
+      >
+        <span class="promo-bar__button-label">{{ section.settings.button_text }}</span>
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" focusable="false" aria-hidden="true">
+          <path d="M4 12H20M20 12L14 6M20 12L14 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    {%- endif -%}
+
+    {%- comment -%} Mobile-only hamburger / close toggle {%- endcomment -%}
+    <button
+      type="button"
+      class="promo-bar__toggle"
+      id="PromoBarToggle-{{ section_id }}"
+      aria-expanded="false"
+      aria-controls="PromoBarDrawer-{{ section_id }}"
+      aria-label="{{ 'general.accessibility.toggle_promo_bar' | t | default: 'Toggle promo bar' }}"
+    >
+      <span class="promo-bar__toggle-icon" aria-hidden="true">
+        <span class="promo-bar__toggle-line promo-bar__toggle-line--top"></span>
+        <span class="promo-bar__toggle-line promo-bar__toggle-line--middle"></span>
+        <span class="promo-bar__toggle-line promo-bar__toggle-line--bottom"></span>
+      </span>
+    </button>
+  </div>
+
+  {%- comment -%}
+    Mobile drawer. Uses the CSS grid-template-rows "0fr -> 1fr" trick
+    so the slide-open/close animation is smooth without JS having to
+    measure/set pixel heights.
+  {%- endcomment -%}
+  <div class="promo-bar__drawer" id="PromoBarDrawer-{{ section_id }}">
+    <div class="promo-bar__drawer-inner">
+      <div class="promo-bar__drawer-content page-width">
+        {%- if section.settings.center_text != blank -%}
+          <p class="promo-bar__message promo-bar__message--mobile">{{ section.settings.center_text }}</p>
+        {%- endif -%}
+
+        {%- if section.settings.button_text != blank -%}
+          <a
+            {% if section.settings.button_link != blank %}
+              href="{{ section.settings.button_link }}"
+            {% else %}
+              role="link" aria-disabled="true"
+            {% endif %}
+            class="promo-bar__button promo-bar__button--mobile"
+          >
+            <span class="promo-bar__button-label">{{ section.settings.button_text }}</span>
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              focusable="false"
+              aria-hidden="true"
+            >
+              <path d="M4 12H20M20 12L14 6M20 12L14 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>
 
 <script>
   /**
