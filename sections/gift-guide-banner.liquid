@@ -1,0 +1,444 @@
+{%- comment -%}
+  Section: Gift Guide Banner
+  ------------------------------------------------------------------
+  A full-width promotional banner with a background image, heading,
+  description and CTA button, plus a thin schema-driven text bar
+  under the banner. Fully dynamic via schema — no hard-coded copy.
+
+  Desktop : background image fills the section; heading/description/
+            button are overlaid, left-aligned, vertically centered.
+  Mobile  : NOT a full-bleed background. Heading + description sit
+            on a plain background at the top (centered), the image
+            follows in normal flow below them, and the button is
+            overlaid on top of the image near its bottom edge — this
+            reproduces the large visual "gap" between the text and
+            the button that the reference design has on mobile.
+
+  Note: the section is intentionally split into two separate markup
+  blocks (desktop vs. mobile media/button) rather than one block
+  repositioned with CSS, because the mobile layout changes *document
+  order* (image sits between description and button), not just
+  position — that can't be done with a single reflowed element.
+{%- endcomment -%}
+
+{%- liquid
+  assign section_id = section.id
+  assign heading_color = section.settings.heading_color
+  assign description_color = section.settings.description_color
+  assign btn_bg = section.settings.button_background
+  assign btn_text = section.settings.button_text_color
+  assign btn_hover_bg = section.settings.button_hover_background
+  assign btn_hover_text = section.settings.button_hover_text_color
+  assign bar_bg = section.settings.bottom_bar_background
+  assign bar_text = section.settings.bottom_bar_text_color
+-%}
+
+<div
+  class="gift-guide-banner"
+  id="GiftGuideBanner-{{ section_id }}"
+  style="
+    --ggb-heading-color: {{ heading_color }};
+    --ggb-description-color: {{ description_color }};
+    --ggb-btn-bg: {{ btn_bg }};
+    --ggb-btn-text: {{ btn_text }};
+    --ggb-btn-hover-bg: {{ btn_hover_bg }};
+    --ggb-btn-hover-text: {{ btn_hover_text }};
+    --ggb-bar-bg: {{ bar_bg }};
+    --ggb-bar-text: {{ bar_text }};
+  "
+>
+
+  {%- comment -%} Desktop full-bleed background image {%- endcomment -%}
+  {%- if section.settings.image != blank -%}
+    <div class="gift-guide-banner__bg" aria-hidden="true">
+      {{
+        section.settings.image
+        | image_url: width: 2000
+        | image_tag:
+          loading: 'lazy',
+          sizes: '100vw',
+          widths: '750, 1100, 1500, 2000',
+          class: 'gift-guide-banner__bg-image'
+      }}
+    </div>
+  {%- endif -%}
+
+  <div class="gift-guide-banner__content page-width">
+
+    {%- comment -%} Heading / description / desktop button {%- endcomment -%}
+    <div class="gift-guide-banner__text">
+      {%- if section.settings.heading != blank -%}
+        <h2 class="gift-guide-banner__heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+
+      {%- if section.settings.description != blank -%}
+        <div class="gift-guide-banner__description">{{ section.settings.description }}</div>
+      {%- endif -%}
+
+      {%- if section.settings.button_text != blank -%}
+        <a
+          {% if section.settings.button_link != blank %}href="{{ section.settings.button_link }}"{% else %}role="link" aria-disabled="true"{% endif %}
+          class="gift-guide-banner__button gift-guide-banner__button--desktop"
+        >
+          <span class="gift-guide-banner__button-label">{{ section.settings.button_text }}</span>
+          {%- render 'promo-bar-arrow-icon' -%}
+        </a>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%}
+      Mobile-only media block: image in normal flow, button overlaid
+      near its bottom edge. Falls back to the main image if no
+      dedicated mobile image is set.
+    {%- endcomment -%}
+    {%- liquid
+      assign mobile_image = section.settings.mobile_image
+      if mobile_image == blank
+        assign mobile_image = section.settings.image
+      endif
+    -%}
+    {%- if mobile_image != blank -%}
+      <div class="gift-guide-banner__mobile-media">
+        {{
+          mobile_image
+          | image_url: width: 1000
+          | image_tag:
+            loading: 'lazy',
+            sizes: '100vw',
+            widths: '480, 750, 1000',
+            class: 'gift-guide-banner__mobile-image'
+        }}
+
+        {%- if section.settings.button_text != blank -%}
+          <a
+            {% if section.settings.button_link != blank %}href="{{ section.settings.button_link }}"{% else %}role="link" aria-disabled="true"{% endif %}
+            class="gift-guide-banner__button gift-guide-banner__button--mobile"
+          >
+            <span class="gift-guide-banner__button-label">{{ section.settings.button_text }}</span>
+            {%- render 'promo-bar-arrow-icon' -%}
+          </a>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+
+  {%- comment -%} Thin schema-driven text bar under the banner {%- endcomment -%}
+  {%- if section.settings.bottom_bar_text != blank -%}
+    <div class="gift-guide-banner__bottom-bar">
+      <p class="gift-guide-banner__bottom-bar-text">{{ section.settings.bottom_bar_text }}</p>
+    </div>
+  {%- endif -%}
+</div>
+
+{%- style -%}
+  /* ==========================================================
+     Gift Guide Banner — shared / desktop styles
+     ========================================================== */
+  #GiftGuideBanner-{{ section_id }} {
+    position: relative;
+    overflow: hidden;
+  }
+
+  #GiftGuideBanner-{{ section_id }} .gift-guide-banner__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  #GiftGuideBanner-{{ section_id }} .gift-guide-banner__bg-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
+
+  #GiftGuideBanner-{{ section_id }} .gift-guide-banner__content {
+    position: relative;
+    z-index: 1;
+  }
+
+  #GiftGuideBanner-{{ section_id }} .gift-guide-banner__heading {
+    margin: 0 0 1.2rem;
+    font-size: 4.4rem;
+    line-height: 1.05;
+    color: var(--ggb-heading-color);
+  }
+
+  #GiftGuideBanner-{{ section_id }} .gift-guide-banner__description {
+    margin: 0 0 2rem;
+    font-size: 1.5rem;
+    line-height: 1.5;
+    color: var(--ggb-description-color);
+  }
+
+  #GiftGuideBanner-{{ section_id }} .gift-guide-banner__description p {
+    margin: 0;
+  }
+
+  /* CTA button — same left-to-right fill hover used across the theme,
+     just with black/yellow as the default/hover colors here. */
+  #GiftGuideBanner-{{ section_id }} .gift-guide-banner__button {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 1.1rem 2rem;
+    background: var(--ggb-btn-bg);
+    color: var(--ggb-btn-text);
+    font-size: 1.3rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    overflow: hidden;
+    isolation: isolate;
+    transition: color 0.35s ease;
+  }
+
+  #GiftGuideBanner-{{ section_id }} .gift-guide-banner__button::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--ggb-btn-hover-bg);
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 0.4s ease;
+    z-index: -1;
+  }
+
+  #GiftGuideBanner-{{ section_id }} .gift-guide-banner__button:hover,
+  #GiftGuideBanner-{{ section_id }} .gift-guide-banner__button:focus-visible {
+    color: var(--ggb-btn-hover-text);
+  }
+
+  #GiftGuideBanner-{{ section_id }} .gift-guide-banner__button:hover::before,
+  #GiftGuideBanner-{{ section_id }} .gift-guide-banner__button:focus-visible::before {
+    transform: scaleX(1);
+  }
+
+  #GiftGuideBanner-{{ section_id }} .gift-guide-banner__button svg {
+    width: 1.6rem;
+    height: 1.6rem;
+    flex-shrink: 0;
+    transition: transform 0.35s ease;
+  }
+
+  #GiftGuideBanner-{{ section_id }} .gift-guide-banner__button:hover svg,
+  #GiftGuideBanner-{{ section_id }} .gift-guide-banner__button:focus-visible svg {
+    transform: translateX(4px);
+  }
+
+  /* Mobile-only media (hidden on desktop) */
+  #GiftGuideBanner-{{ section_id }} .gift-guide-banner__mobile-media {
+    display: none;
+  }
+
+  /* Bottom bar */
+  #GiftGuideBanner-{{ section_id }} .gift-guide-banner__bottom-bar {
+    position: relative;
+    z-index: 1;
+    background: var(--ggb-bar-bg);
+  }
+
+  #GiftGuideBanner-{{ section_id }} .gift-guide-banner__bottom-bar-text {
+    margin: 0;
+    padding: 1rem 1.5rem;
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ggb-bar-text);
+  }
+
+  /* ==========================================================
+     Desktop layout: overlay text on the background image
+     ========================================================== */
+  @media screen and (min-width: 750px) {
+    #GiftGuideBanner-{{ section_id }} .gift-guide-banner__content {
+      display: flex;
+      align-items: center;
+      min-height: 52rem;
+      padding-top: 6rem;
+      padding-bottom: 6rem;
+    }
+
+    #GiftGuideBanner-{{ section_id }} .gift-guide-banner__text {
+      max-width: 44rem;
+      text-align: left;
+    }
+  }
+
+  /* ==========================================================
+     Mobile layout: stacked, centered text -> image -> overlaid button
+     ========================================================== */
+  @media screen and (max-width: 749px) {
+    #GiftGuideBanner-{{ section_id }} .gift-guide-banner__bg {
+      display: none;
+    }
+
+    #GiftGuideBanner-{{ section_id }} .gift-guide-banner__content {
+      padding-top: 4rem;
+    }
+
+    #GiftGuideBanner-{{ section_id }} .gift-guide-banner__text {
+      text-align: center;
+    }
+
+    #GiftGuideBanner-{{ section_id }} .gift-guide-banner__heading {
+      font-size: 2.8rem;
+    }
+
+    /* This is the "gap": on mobile the button lives inside the media
+       block below (overlaid on the image), not right after the
+       description, so nothing renders here between description and
+       image but normal element spacing. */
+    #GiftGuideBanner-{{ section_id }} .gift-guide-banner__button--desktop {
+      display: none;
+    }
+
+    #GiftGuideBanner-{{ section_id }} .gift-guide-banner__mobile-media {
+      display: block;
+      position: relative;
+      margin-top: 2rem;
+    }
+
+    #GiftGuideBanner-{{ section_id }} .gift-guide-banner__mobile-image {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    #GiftGuideBanner-{{ section_id }} .gift-guide-banner__mobile-media .gift-guide-banner__button {
+      position: absolute;
+      left: 50%;
+      bottom: 6%;
+      transform: translateX(-50%);
+      white-space: nowrap;
+    }
+  }
+{%- endstyle -%}
+
+{% schema %}
+{
+  "name": "Gift Guide Banner",
+  "tag": "section",
+  "class": "section-gift-guide-banner",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Images"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Background image (desktop)"
+    },
+    {
+      "type": "image_picker",
+      "id": "mobile_image",
+      "label": "Image (mobile)",
+      "info": "Optional. Falls back to the desktop image if left blank."
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "The Gift Guide"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p>Discover Joy: Your Ultimate Holiday Gift Destination. Explore our curated selection and find the perfect gifts to delight your loved ones this holiday season.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button label",
+      "default": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Bottom text bar"
+    },
+    {
+      "type": "text",
+      "id": "bottom_bar_text",
+      "label": "Bottom bar text",
+      "default": "Sustainable, ethically made clothes in sizes XXS to 6XL"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "color",
+      "id": "description_color",
+      "label": "Description color",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "color",
+      "id": "button_background",
+      "label": "Button background",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_background",
+      "label": "Button hover background",
+      "default": "#f4e04d"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_text_color",
+      "label": "Button hover text color",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "color",
+      "id": "bottom_bar_background",
+      "label": "Bottom bar background",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "color",
+      "id": "bottom_bar_text_color",
+      "label": "Bottom bar text color",
+      "default": "#ffffff"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Gift Guide Banner"
+    }
+  ]
+}
+{% endschema %}
