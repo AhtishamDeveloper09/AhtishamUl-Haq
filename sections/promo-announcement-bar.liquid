@@ -303,6 +303,13 @@
 
   /* Below the breakpoint, show the mobile toggle + drawer */
   @media screen and (max-width: 749px) {
+    #PromoBar-{{ section_id }} .promo-bar__logo-link {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+
     #PromoBar-{{ section_id }} .promo-bar__toggle {
       display: inline-flex;
       align-items: center;
