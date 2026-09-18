@@ -541,6 +541,16 @@
         var openPop = closer.closest('.stl-popup');
         if (openPop) closePopup(openPop);
       }
+
+      // Safety net: any click outside the popup panel closes whichever popup
+      // is currently open, even if it didn't land on the overlay itself.
+      document.querySelectorAll('.stl-popup.is-open').forEach(function (popup) {
+        var panel = popup.querySelector('.stl-popup__panel');
+        var clickedOpener = e.target.closest('[data-stl-open]');
+        if (panel && !panel.contains(e.target) && !clickedOpener) {
+          closePopup(popup);
+        }
+      });
     });
 
     document.addEventListener('keydown', function (e) {
