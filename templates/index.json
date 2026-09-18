@@ -117,10 +117,10 @@
         "product_wJwKtz": {
           "type": "product",
           "settings": {
-            "product": "",
-            "bonus_product": "blue-silk-tuxedo",
+            "product": "blue-silk-tuxedo",
+            "bonus_product": "dark-winter-jacket",
             "bonus_trigger_color": "Black",
-            "bonus_trigger_size": "Medium",
+            "bonus_trigger_size": "M",
             "icon_v_position": "top",
             "icon_v_offset": 50,
             "icon_h_position": "left",
@@ -131,9 +131,9 @@
           "type": "product",
           "settings": {
             "product": "chequered-red-shirt",
-            "bonus_product": "",
+            "bonus_product": "dark-winter-jacket",
             "bonus_trigger_color": "Black",
-            "bonus_trigger_size": "Medium",
+            "bonus_trigger_size": "M",
             "icon_v_position": "top",
             "icon_v_offset": 50,
             "icon_h_position": "left",
@@ -144,9 +144,9 @@
           "type": "product",
           "settings": {
             "product": "classic-leather-jacket",
-            "bonus_product": "",
+            "bonus_product": "dark-winter-jacket",
             "bonus_trigger_color": "Black",
-            "bonus_trigger_size": "Medium",
+            "bonus_trigger_size": "M",
             "icon_v_position": "top",
             "icon_v_offset": 50,
             "icon_h_position": "left",
@@ -156,10 +156,10 @@
         "product_XPTceT": {
           "type": "product",
           "settings": {
-            "product": "",
-            "bonus_product": "",
+            "product": "classic-varsity-top",
+            "bonus_product": "dark-winter-jacket",
             "bonus_trigger_color": "Black",
-            "bonus_trigger_size": "Medium",
+            "bonus_trigger_size": "M",
             "icon_v_position": "top",
             "icon_v_offset": 50,
             "icon_h_position": "left",
@@ -169,10 +169,10 @@
         "product_HPrxad": {
           "type": "product",
           "settings": {
-            "product": "",
-            "bonus_product": "",
+            "product": "dark-denim-top",
+            "bonus_product": "dark-winter-jacket",
             "bonus_trigger_color": "Black",
-            "bonus_trigger_size": "Medium",
+            "bonus_trigger_size": "M",
             "icon_v_position": "top",
             "icon_v_offset": 50,
             "icon_h_position": "left",
