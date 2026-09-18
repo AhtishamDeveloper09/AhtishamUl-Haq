@@ -676,10 +676,25 @@
         addBtn.disabled = true;
         addLabel.textContent = 'Adding...';
 
+        // Dawn's <cart-drawer> only repaints when it's handed fresh section
+        // HTML via renderContents(); just calling .open() re-shows whatever
+        // (empty) markup it already had, which is why a reload was needed.
+        var drawer = document.querySelector('cart-drawer') || document.querySelector('cart-notification');
+        var sectionsToRender = [];
+        if (drawer && typeof drawer.getSectionsToRender === 'function') {
+          sectionsToRender = drawer.getSectionsToRender().map(function (s) {
+            return s.section;
+          });
+        }
+
         fetch('/cart/add.js', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-          body: JSON.stringify({ items: items }),
+          body: JSON.stringify({
+            items: items,
+            sections: sectionsToRender,
+            sections_url: window.location.pathname,
+          }),
         })
           .then(function (res) {
             if (!res.ok)
@@ -688,12 +703,28 @@
               });
             return res.json();
           })
-          .then(function () {
+          .then(function (response) {
             message.textContent = items.length > 1 ? 'Added to cart (bundle included).' : 'Added to cart.';
             message.className = 'stl-form__message is-success';
             document.dispatchEvent(new CustomEvent('cart:refresh'));
-            var drawer = document.querySelector('cart-drawer, cart-notification');
-            if (drawer && typeof drawer.open === 'function') drawer.open();
+
+            if (drawer && response.sections && typeof drawer.renderContents === 'function') {
+              // Dawn's own method: repaints the drawer's inner HTML AND opens it.
+              drawer.renderContents(response);
+            } else if (drawer && typeof drawer.open === 'function') {
+              drawer.open();
+            } else {
+              // No drawer component found on this theme — fall back to a full
+              // cart fetch so at least the cart icon count can be updated.
+              fetch('/cart.js')
+                .then(function (r) {
+                  return r.json();
+                })
+                .then(function (cart) {
+                  document.dispatchEvent(new CustomEvent('cart:count-updated', { detail: cart }));
+                });
+            }
+
             addBtn.disabled = false;
             addLabel.textContent = defaultLabel;
           })
