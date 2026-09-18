@@ -63,9 +63,7 @@
         class="promo-bar__button promo-bar__button--desktop"
       >
         <span class="promo-bar__button-label">{{ section.settings.button_text }}</span>
-        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" focusable="false" aria-hidden="true">
-          <path d="M4 12H20M20 12L14 6M20 12L14 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
+        {{ 'arrow-icon.svg' | inline_asset_content }}
       </a>
     {%- endif -%}
 
@@ -108,15 +106,7 @@
             class="promo-bar__button promo-bar__button--mobile"
           >
             <span class="promo-bar__button-label">{{ section.settings.button_text }}</span>
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              focusable="false"
-              aria-hidden="true"
-            >
-              <path d="M4 12H20M20 12L14 6M20 12L14 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
+            {{ 'arrow-icon.svg' | inline_asset_content }}
           </a>
         {%- endif -%}
       </div>
