@@ -81,7 +81,7 @@
           class="gift-guide-banner__button gift-guide-banner__button--desktop"
         >
           <span class="gift-guide-banner__button-label">{{ section.settings.button_text }}</span>
-          {%- render 'promo-bar-arrow-icon' -%}
+          {{ 'arrow-icon.svg' | inline_asset_content }}
         </a>
       {%- endif -%}
     </div>
@@ -115,7 +115,7 @@
             class="gift-guide-banner__button gift-guide-banner__button--mobile"
           >
             <span class="gift-guide-banner__button-label">{{ section.settings.button_text }}</span>
-            {%- render 'promo-bar-arrow-icon' -%}
+            {{ 'arrow-icon.svg' | inline_asset_content }}
           </a>
         {%- endif -%}
       </div>
