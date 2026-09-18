@@ -98,10 +98,10 @@
         "bottom_bar_text_color": "#000000"
       }
     },
-    "custom_shop_the_look_GQRQbP": {
+    "custom_shop_the_look_6eyNgk": {
       "type": "custom-shop-the-look",
       "blocks": {
-        "product_tBgMeY": {
+        "product_GyJXYf": {
           "type": "product",
           "settings": {
             "product": "black-leather-bag",
@@ -114,10 +114,10 @@
             "icon_h_offset": 50
           }
         },
-        "product_FNCTbi": {
+        "product_Q9idAK": {
           "type": "product",
           "settings": {
-            "product": "classic-varsity-top",
+            "product": "chequered-red-shirt",
             "bonus_product": "",
             "bonus_trigger_color": "Black",
             "bonus_trigger_size": "Medium",
@@ -127,11 +127,11 @@
             "icon_h_offset": 50
           }
         },
-        "product_Em8HMa": {
+        "product_qC3tWM": {
           "type": "product",
           "settings": {
-            "product": "led-high-tops",
-            "bonus_product": "dark-winter-jacket",
+            "product": "classic-leather-jacket",
+            "bonus_product": "",
             "bonus_trigger_color": "Black",
             "bonus_trigger_size": "Medium",
             "icon_v_position": "top",
@@ -140,7 +140,7 @@
             "icon_h_offset": 50
           }
         },
-        "product_mPhi8M": {
+        "product_wJwKtz": {
           "type": "product",
           "settings": {
             "product": "",
@@ -153,7 +153,7 @@
             "icon_h_offset": 50
           }
         },
-        "product_wWRqFx": {
+        "product_XPTceT": {
           "type": "product",
           "settings": {
             "product": "",
@@ -166,7 +166,7 @@
             "icon_h_offset": 50
           }
         },
-        "product_EzRiHj": {
+        "product_HPrxad": {
           "type": "product",
           "settings": {
             "product": "",
@@ -181,12 +181,12 @@
         }
       },
       "block_order": [
-        "product_tBgMeY",
-        "product_FNCTbi",
-        "product_Em8HMa",
-        "product_mPhi8M",
-        "product_wWRqFx",
-        "product_EzRiHj"
+        "product_GyJXYf",
+        "product_Q9idAK",
+        "product_qC3tWM",
+        "product_wJwKtz",
+        "product_XPTceT",
+        "product_HPrxad"
       ],
       "name": "Shop the Look",
       "settings": {
@@ -198,6 +198,6 @@
     "image_banner",
     "featured_collection",
     "gift_guide_banner_8qhcKt",
-    "custom_shop_the_look_GQRQbP"
+    "custom_shop_the_look_6eyNgk"
   ]
 }
