@@ -79,7 +79,7 @@
       }
     },
     "gift_guide_banner_8qhcKt": {
-      "type": "gift-guide-banner",
+      "type": "custom-gift-guide-banner",
       "name": "Gift Guide Banner",
       "settings": {
         "image": "shopify://shop_images/Group_1000008197.png",
