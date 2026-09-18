@@ -55,17 +55,17 @@
         "padding_bottom": 20
       }
     },
-    "promo_announcement_bar_wN9EjK": {
-      "type": "promo-announcement-bar",
-      "name": "Promo Announcement Bar",
+    "custom_promo_header_BQPRTQ": {
+      "type": "custom-promo-header",
+      "name": "Custom Promo Header",
       "settings": {
         "logo_text": "TISSO VISON",
         "center_text": "Find the ideal gift for your loved ones.",
         "button_text": "Choose Gift",
-        "button_link": "#",
-        "background_color": "#f5f5f5",
+        "button_link": "",
+        "background_color": "#F5F5F5",
         "text_color": "#000000",
-        "button_background": "#fff544",
+        "button_background": "#FFF544",
         "button_text_color": "#000000",
         "button_hover_background": "#000000",
         "button_hover_text_color": "#ffffff"
@@ -75,6 +75,6 @@
   "order": [
     "announcement-bar",
     "header",
-    "promo_announcement_bar_wN9EjK"
+    "custom_promo_header_BQPRTQ"
   ]
 }
