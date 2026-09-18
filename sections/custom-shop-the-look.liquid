@@ -482,6 +482,53 @@
   (function () {
     'use strict';
 
+    // Manually refresh Dawn's cart drawer instead of relying on the theme's own
+    // getSectionsToRender()/renderContents() — those depend on internal DOM-id
+    // vs section-id mappings we can't see from here, and were the reason the
+    // drawer kept showing stale/empty content. This fetches the cart-drawer
+    // section straight from Shopify's Section Rendering API (always accurate,
+    // since it reads the real cart cookie server-side) and swaps Dawn's stable
+    // ".drawer__inner" markup in by hand.
+    function refreshCartDrawer() {
+      var liveDrawer = document.querySelector('cart-drawer');
+      if (!liveDrawer) return Promise.resolve();
+
+      return fetch(window.location.pathname + '?sections=cart-drawer,cart-icon-bubble')
+        .then(function (res) {
+          return res.json();
+        })
+        .then(function (data) {
+          if (data['cart-drawer']) {
+            var temp = document.createElement('div');
+            temp.innerHTML = data['cart-drawer'];
+
+            var freshInner = temp.querySelector('.drawer__inner');
+            var liveInner = liveDrawer.querySelector('.drawer__inner');
+
+            if (freshInner && liveInner) {
+              liveInner.innerHTML = freshInner.innerHTML;
+            } else {
+              var freshDrawerTag = temp.querySelector('cart-drawer');
+              liveDrawer.innerHTML = freshDrawerTag ? freshDrawerTag.innerHTML : data['cart-drawer'];
+            }
+
+            liveDrawer.classList.remove('is-empty');
+          }
+
+          if (data['cart-icon-bubble']) {
+            var bubble = document.getElementById('cart-icon-bubble');
+            if (bubble) bubble.innerHTML = data['cart-icon-bubble'];
+          }
+
+          if (typeof liveDrawer.open === 'function') {
+            liveDrawer.open();
+          } else {
+            liveDrawer.classList.add('active');
+            document.body.style.overflow = 'hidden';
+          }
+        });
+    }
+
     document.addEventListener('click', function (e) {
       var opener = e.target.closest('[data-stl-open]');
       if (opener) {
@@ -694,17 +741,6 @@
         addBtn.disabled = true;
         addLabel.textContent = 'Adding...';
 
-        // Dawn's <cart-drawer> only repaints when it's handed fresh section
-        // HTML via renderContents(); just calling .open() re-shows whatever
-        // (empty) markup it already had, which is why a reload was needed.
-        var drawer = document.querySelector('cart-drawer') || document.querySelector('cart-notification');
-        var sectionIds = [];
-        if (drawer && typeof drawer.getSectionsToRender === 'function') {
-          sectionIds = drawer.getSectionsToRender().map(function (s) {
-            return s.id;
-          });
-        }
-
         fetch('/cart/add.js', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
@@ -720,33 +756,7 @@
           .then(function () {
             message.textContent = items.length > 1 ? 'Added to cart (bundle included).' : 'Added to cart.';
             message.className = 'stl-form__message is-success';
-
-            if (drawer && sectionIds.length && typeof drawer.renderContents === 'function') {
-              // The multi-item /cart/add.js payload we send (needed for the bundle
-              // rule) doesn't reliably hand back rendered "sections" HTML — so we
-              // fetch it directly from Shopify's Section Rendering API instead of
-              // depending on the add-to-cart response for it, then pass it to the
-              // drawer's own renderContents() in the exact shape it expects.
-              return fetch(window.location.pathname + '?sections=' + sectionIds.join(','))
-                .then(function (r) {
-                  return r.json();
-                })
-                .then(function (sectionsHtml) {
-                  drawer.renderContents({ sections: sectionsHtml });
-                });
-            } else if (drawer && typeof drawer.open === 'function') {
-              drawer.open();
-            } else {
-              // No drawer component found on this theme — fall back to a full
-              // cart fetch so at least the cart icon count can be updated.
-              return fetch('/cart.js')
-                .then(function (r) {
-                  return r.json();
-                })
-                .then(function (cart) {
-                  document.dispatchEvent(new CustomEvent('cart:count-updated', { detail: cart }));
-                });
-            }
+            return refreshCartDrawer();
           })
           .then(function () {
             document.dispatchEvent(new CustomEvent('cart:refresh'));
