@@ -1,7 +1,7 @@
 {%- comment -%}
-  Section: Promo Announcement Bar
+  Section: Custom Promo Header
   ------------------------------------------------------------------
-  A fully dynamic announcement/promo bar for the Dawn theme header
+  A fully dynamic custom promo header for the Dawn theme header
   group. Everything visible (logo text, message, button label/link,
   colors) is schema-driven so merchants can edit it in the theme
   editor with no code changes.
@@ -359,9 +359,9 @@
 
 {% schema %}
 {
-  "name": "Promo Announcement Bar",
+  "name": "Custom Promo Header",
   "tag": "section",
-  "class": "section-promo-announcement-bar",
+  "class": "custom-promo-header",
   "enabled_on": {
     "groups": ["header"]
   },
@@ -444,7 +444,8 @@
   ],
   "presets": [
     {
-      "name": "Promo Announcement Bar"
+      "name": "Custom Promo Header",
+      "category": "Custom"
     }
   ]
 }
