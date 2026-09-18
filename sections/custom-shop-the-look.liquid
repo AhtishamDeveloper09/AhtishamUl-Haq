@@ -698,9 +698,9 @@
         // HTML via renderContents(); just calling .open() re-shows whatever
         // (empty) markup it already had, which is why a reload was needed.
         var drawer = document.querySelector('cart-drawer') || document.querySelector('cart-notification');
-        var sectionsToRender = [];
+        var sectionIds = [];
         if (drawer && typeof drawer.getSectionsToRender === 'function') {
-          sectionsToRender = drawer.getSectionsToRender().map(function (s) {
+          sectionIds = drawer.getSectionsToRender().map(function (s) {
             return s.id;
           });
         }
@@ -708,11 +708,7 @@
         fetch('/cart/add.js', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-          body: JSON.stringify({
-            items: items,
-            sections: sectionsToRender,
-            sections_url: window.location.pathname,
-          }),
+          body: JSON.stringify({ items: items }),
         })
           .then(function (res) {
             if (!res.ok)
@@ -721,20 +717,29 @@
               });
             return res.json();
           })
-          .then(function (response) {
+          .then(function () {
             message.textContent = items.length > 1 ? 'Added to cart (bundle included).' : 'Added to cart.';
             message.className = 'stl-form__message is-success';
-            document.dispatchEvent(new CustomEvent('cart:refresh'));
 
-            if (drawer && response.sections && typeof drawer.renderContents === 'function') {
-              // Dawn's own method: repaints the drawer's inner HTML AND opens it.
-              drawer.renderContents(response);
+            if (drawer && sectionIds.length && typeof drawer.renderContents === 'function') {
+              // The multi-item /cart/add.js payload we send (needed for the bundle
+              // rule) doesn't reliably hand back rendered "sections" HTML — so we
+              // fetch it directly from Shopify's Section Rendering API instead of
+              // depending on the add-to-cart response for it, then pass it to the
+              // drawer's own renderContents() in the exact shape it expects.
+              return fetch(window.location.pathname + '?sections=' + sectionIds.join(','))
+                .then(function (r) {
+                  return r.json();
+                })
+                .then(function (sectionsHtml) {
+                  drawer.renderContents({ sections: sectionsHtml });
+                });
             } else if (drawer && typeof drawer.open === 'function') {
               drawer.open();
             } else {
               // No drawer component found on this theme — fall back to a full
               // cart fetch so at least the cart icon count can be updated.
-              fetch('/cart.js')
+              return fetch('/cart.js')
                 .then(function (r) {
                   return r.json();
                 })
@@ -742,7 +747,9 @@
                   document.dispatchEvent(new CustomEvent('cart:count-updated', { detail: cart }));
                 });
             }
-
+          })
+          .then(function () {
+            document.dispatchEvent(new CustomEvent('cart:refresh'));
             addBtn.disabled = false;
             addLabel.textContent = defaultLabel;
           })
