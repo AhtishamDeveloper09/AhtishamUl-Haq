@@ -86,15 +86,15 @@
         "heading": "The Gift Guide",
         "description": "<p>Discover Joy: Your Ultimate Holiday Gift Destination. Explore our curated selection and find the perfect gifts to delight your loved ones this holiday season.</p>",
         "button_text": "Shop Now",
-        "button_link": "",
+        "button_link": "#",
         "bottom_bar_text": "Sustainable, ethically made clothes in sizes XXS to 6XL",
         "heading_color": "#000000",
         "description_color": "#000000",
         "button_background": "#000000",
         "button_text_color": "#ffffff",
-        "button_hover_background": "#FFF544",
+        "button_hover_background": "#fff544",
         "button_hover_text_color": "#000000",
-        "bottom_bar_background": "#F5F5F5",
+        "bottom_bar_background": "#f5f5f5",
         "bottom_bar_text_color": "#000000"
       }
     }
