@@ -114,6 +114,19 @@
             "icon_h_offset": 50
           }
         },
+        "product_wJwKtz": {
+          "type": "product",
+          "settings": {
+            "product": "",
+            "bonus_product": "blue-silk-tuxedo",
+            "bonus_trigger_color": "Black",
+            "bonus_trigger_size": "Medium",
+            "icon_v_position": "top",
+            "icon_v_offset": 50,
+            "icon_h_position": "left",
+            "icon_h_offset": 50
+          }
+        },
         "product_Q9idAK": {
           "type": "product",
           "settings": {
@@ -131,19 +144,6 @@
           "type": "product",
           "settings": {
             "product": "classic-leather-jacket",
-            "bonus_product": "",
-            "bonus_trigger_color": "Black",
-            "bonus_trigger_size": "Medium",
-            "icon_v_position": "top",
-            "icon_v_offset": 50,
-            "icon_h_position": "left",
-            "icon_h_offset": 50
-          }
-        },
-        "product_wJwKtz": {
-          "type": "product",
-          "settings": {
-            "product": "",
             "bonus_product": "",
             "bonus_trigger_color": "Black",
             "bonus_trigger_size": "Medium",
@@ -182,9 +182,9 @@
       },
       "block_order": [
         "product_GyJXYf",
+        "product_wJwKtz",
         "product_Q9idAK",
         "product_qC3tWM",
-        "product_wJwKtz",
         "product_XPTceT",
         "product_HPrxad"
       ],
