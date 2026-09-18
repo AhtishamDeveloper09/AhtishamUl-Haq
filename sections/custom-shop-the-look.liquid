@@ -1,0 +1,818 @@
+{% style %}
+    .stl-wrap {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+  }
+
+  .stl-heading {
+    font-size: 24px;
+    margin: 0 0 24px;
+  }
+
+  .stl-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+  @media screen and (max-width: 749px) {
+    .stl-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+  }
+
+  .stl-card {
+    position: relative;
+    overflow: hidden;
+    background: #f4f4f4;
+  }
+
+  .stl-card__img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+  }
+
+  .stl-card__img--placeholder {
+    background: #e2e2e2;
+  }
+
+  .stl-plus {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #fff;
+    border: none;
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+    transition: transform 0.2s ease;
+  }
+
+  .stl-plus:hover {
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+
+  /* ---------- Popup ---------- */
+
+  .stl-popup {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: none;
+  }
+
+  .stl-popup.is-open {
+    display: block;
+  }
+
+  .stl-popup__overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    transition: opacity 0.25s ease;
+  }
+
+  .stl-popup.is-open .stl-popup__overlay {
+    opacity: 1;
+  }
+
+  .stl-popup__panel {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -48%);
+    width: min(420px, 92vw);
+    max-height: 88vh;
+    overflow-y: auto;
+    background: #fff;
+    padding: 28px;
+    opacity: 0;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+
+  .stl-popup.is-open .stl-popup__panel {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+
+  .stl-popup__close {
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    background: none;
+    border: none;
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .stl-popup__media img {
+    width: 100%;
+    display: block;
+    margin-bottom: 16px;
+  }
+
+  .stl-popup__title {
+    margin: 0 0 4px;
+    font-size: 18px;
+  }
+
+  .stl-popup__price {
+    margin: 0 0 12px;
+    font-size: 16px;
+  }
+
+  .stl-popup__desc {
+    font-size: 13px;
+    color: #666;
+    margin: 0 0 20px;
+    line-height: 1.5;
+  }
+
+  .stl-option {
+    margin-bottom: 20px;
+  }
+
+  .stl-option__label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 0 0 8px;
+  }
+
+  /* ---------- Color swatch row with sliding highlight ---------- */
+
+  .stl-swatch-row {
+    position: relative;
+    display: flex;
+    border: 1px solid #111;
+  }
+
+  .stl-swatch-highlight {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 0;
+    background: #111;
+    transition: transform 0.28s ease, width 0.28s ease;
+    z-index: 0;
+  }
+
+  .stl-swatch {
+    position: relative;
+    z-index: 1;
+    flex: 1;
+    padding: 10px 12px;
+    background: transparent;
+    border: none;
+    border-right: 1px solid #111;
+    font-size: 13px;
+    cursor: pointer;
+    color: #111;
+    transition: color 0.28s ease;
+  }
+
+  .stl-swatch:last-child {
+    border-right: none;
+  }
+
+  .stl-swatch.is-active {
+    color: #fff;
+  }
+
+  /* ---------- Size dropdown ---------- */
+
+  .stl-size {
+    position: relative;
+  }
+
+  .stl-size__toggle {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 12px;
+    background: #fff;
+    border: 1px solid #ccc;
+    font-size: 13px;
+    cursor: pointer;
+  }
+
+  .stl-size__toggle svg {
+    transition: transform 0.25s ease;
+  }
+
+  .stl-size.is-open .stl-size__toggle svg {
+    transform: rotate(180deg);
+  }
+
+  .stl-size__list {
+    list-style: none;
+    margin: 4px 0 0;
+    padding: 0;
+    border: 1px solid #eee;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.28s ease, opacity 0.2s ease;
+  }
+
+  .stl-size.is-open .stl-size__list {
+    max-height: 240px;
+    opacity: 1;
+  }
+
+  .stl-size__option {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 10px 12px;
+    background: #fff;
+    border: none;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  .stl-size__option:hover {
+    background: #111;
+    color: #fff;
+  }
+
+  .stl-generic-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .stl-generic-option {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    background: #fff;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  .stl-generic-option.is-active {
+    background: #111;
+    color: #fff;
+    border-color: #111;
+  }
+
+  .stl-add-to-cart {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px;
+    background: #111;
+    color: #fff;
+    border: none;
+    font-size: 13px;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: opacity 0.2s ease;
+  }
+
+  .stl-add-to-cart:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .stl-form__message {
+    font-size: 12px;
+    margin: 10px 0 0;
+    min-height: 14px;
+  }
+
+  .stl-form__message.is-error {
+    color: #c0392b;
+  }
+
+  .stl-form__message.is-success {
+    color: #1e7e34;
+  }
+{% endstyle %}
+
+<div class="stl-wrap" data-section="{{ section.id }}">
+  {%- if section.settings.heading != blank -%}
+    <h2 class="stl-heading">{{ section.settings.heading }}</h2>
+  {%- endif -%}
+
+  <div class="stl-grid">
+    {%- for block in section.blocks -%}
+      {%- assign product = block.settings.product -%}
+      <div class="stl-card" {{ block.shopify_attributes }}>
+        {%- if product != blank -%}
+          {%- if product.featured_image != blank -%}
+            <img
+              class="stl-card__img"
+              src="{{ product.featured_image | image_url: width: 800 }}"
+              srcset="{{ product.featured_image | image_url: width: 400 }} 400w, {{ product.featured_image | image_url: width: 800 }} 800w"
+              sizes="(max-width: 749px) 50vw, 33vw"
+              alt="{{ product.featured_image.alt | escape }}"
+              loading="lazy"
+              width="{{ product.featured_image.width }}"
+              height="{{ product.featured_image.height }}"
+            >
+          {%- else -%}
+            <div class="stl-card__img stl-card__img--placeholder"></div>
+          {%- endif -%}
+
+          <button
+            type="button"
+            class="stl-plus"
+            style="top: {% if block.settings.icon_v_position == 'top' %}{{ block.settings.icon_v_offset }}%{% else %}auto{% endif %}; bottom: {% if block.settings.icon_v_position == 'bottom' %}{{ block.settings.icon_v_offset }}%{% else %}auto{% endif %}; left: {% if block.settings.icon_h_position == 'left' %}{{ block.settings.icon_h_offset }}%{% else %}auto{% endif %}; right: {% if block.settings.icon_h_position == 'right' %}{{ block.settings.icon_h_offset }}%{% else %}auto{% endif %};"
+            data-stl-open="stl-popup-{{ section.id }}-{{ forloop.index }}"
+            aria-label="{{ 'products.product.choose_options' | t | default: 'View product options' }}"
+          >
+            <span aria-hidden="true">+</span>
+          </button>
+        {%- else -%}
+          <div class="stl-card__img stl-card__img--placeholder"></div>
+        {%- endif -%}
+      </div>
+    {%- endfor -%}
+  </div>
+
+  {%- comment -%} Popups — one per block, rendered outside the grid flow {%- endcomment -%}
+  {%- for block in section.blocks -%}
+    {%- assign product = block.settings.product -%}
+    {%- if product != blank -%}
+      <div class="stl-popup" id="stl-popup-{{ section.id }}-{{ forloop.index }}" data-stl-popup>
+        <div class="stl-popup__overlay" data-stl-close></div>
+        <div class="stl-popup__panel" role="dialog" aria-modal="true">
+          <button
+            type="button"
+            class="stl-popup__close"
+            data-stl-close
+            aria-label="{{ 'accessibility.close' | t | default: 'Close' }}"
+          >
+            &times;
+          </button>
+
+          <div class="stl-popup__media">
+            {%- if product.featured_image != blank -%}
+              <img
+                src="{{ product.featured_image | image_url: width: 500 }}"
+                alt="{{ product.featured_image.alt | escape }}"
+                loading="lazy"
+              >
+            {%- endif -%}
+          </div>
+
+          <div class="stl-popup__info">
+            <h3 class="stl-popup__title">{{ product.title }}</h3>
+            <p class="stl-popup__price">{{ product.price | money }}</p>
+            {%- if product.description != blank -%}
+              <p class="stl-popup__desc">{{ product.description | strip_html | truncatewords: 28 }}</p>
+            {%- endif -%}
+
+            <form
+              class="stl-form"
+              data-stl-form
+              data-bonus-id="{{ block.settings.bonus_product.selected_or_first_available_variant.id }}"
+              data-bonus-color="{{ block.settings.bonus_trigger_color | escape }}"
+              data-bonus-size="{{ block.settings.bonus_trigger_size | escape }}"
+            >
+              {%- for option in product.options_with_values -%}
+                {%- assign option_name_down = option.name | downcase -%}
+                <div class="stl-option" data-option-position="{{ option.position }}">
+                  <p class="stl-option__label">{{ option.name }}</p>
+
+                  {%- if option_name_down contains 'color' or option_name_down contains 'colour' -%}
+                    <div class="stl-swatch-row" data-stl-swatches>
+                      <span class="stl-swatch-highlight" data-stl-highlight></span>
+                      {%- for value in option.values -%}
+                        <button type="button" class="stl-swatch" data-value="{{ value | escape }}">{{ value }}</button>
+                      {%- endfor -%}
+                    </div>
+
+                  {%- elsif option_name_down contains 'size' -%}
+                    <div class="stl-size" data-stl-size>
+                      <button type="button" class="stl-size__toggle" data-stl-size-toggle>
+                        <span data-stl-size-label>
+                          {{- 'products.product.choose_size' | t | default: 'Choose a Size' -}}
+                        </span>
+                        <svg
+                          data-stl-size-arrow
+                          width="10"
+                          height="6"
+                          viewBox="0 0 10 6"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                      </button>
+                      <ul class="stl-size__list" data-stl-size-list>
+                        {%- for value in option.values -%}
+                          <li>
+                            <button type="button" class="stl-size__option" data-value="{{ value | escape }}">
+                              {{ value }}
+                            </button>
+                          </li>
+                        {%- endfor -%}
+                      </ul>
+                    </div>
+
+                  {%- else -%}
+                    <div class="stl-generic-row" data-stl-generic>
+                      {%- for value in option.values -%}
+                        <button type="button" class="stl-generic-option" data-value="{{ value | escape }}">
+                          {{ value }}
+                        </button>
+                      {%- endfor -%}
+                    </div>
+                  {%- endif -%}
+                </div>
+              {%- endfor -%}
+
+              <button type="submit" class="stl-add-to-cart" data-stl-add>
+                <span data-stl-add-label>{{ 'products.product.add_to_cart' | t | default: 'ADD TO CART' }}</span>
+                <span aria-hidden="true">&rarr;</span>
+              </button>
+              <p class="stl-form__message" data-stl-message role="status" aria-live="polite"></p>
+            </form>
+
+            <script type="application/json" data-stl-variants>
+              {{ product.variants | json }}
+            </script>
+          </div>
+        </div>
+      </div>
+    {%- endif -%}
+  {%- endfor -%}
+</div>
+
+<script>
+  (function () {
+    'use strict';
+
+    document.addEventListener('click', function (e) {
+      var opener = e.target.closest('[data-stl-open]');
+      if (opener) {
+        var popup = document.getElementById(opener.getAttribute('data-stl-open'));
+        if (popup) openPopup(popup);
+      }
+
+      var closer = e.target.closest('[data-stl-close]');
+      if (closer) {
+        var openPop = closer.closest('.stl-popup');
+        if (openPop) closePopup(openPop);
+      }
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.stl-popup.is-open').forEach(closePopup);
+      }
+    });
+
+    function openPopup(popup) {
+      popup.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closePopup(popup) {
+      popup.classList.remove('is-open');
+      if (!document.querySelector('.stl-popup.is-open')) {
+        document.body.style.overflow = '';
+      }
+    }
+
+    // Initialize each popup's interactive form once, on first open
+    var initialized = new WeakSet();
+    document.addEventListener('click', function (e) {
+      var opener = e.target.closest('[data-stl-open]');
+      if (!opener) return;
+      var popup = document.getElementById(opener.getAttribute('data-stl-open'));
+      if (popup && !initialized.has(popup)) {
+        initPopup(popup);
+        initialized.add(popup);
+      }
+    });
+
+    function initPopup(popup) {
+      var form = popup.querySelector('[data-stl-form]');
+      if (!form) return;
+
+      var variantsScript = popup.querySelector('[data-stl-variants]');
+      var variants = [];
+      try {
+        variants = JSON.parse(variantsScript.textContent);
+      } catch (err) {
+        variants = [];
+      }
+
+      var selected = {}; // { "1": "Blue", "2": "S" }
+
+      // ---- Color swatches ----
+      var swatchRow = form.querySelector('[data-stl-swatches]');
+      if (swatchRow) {
+        var highlight = swatchRow.querySelector('[data-stl-highlight]');
+        var swatchButtons = Array.prototype.slice.call(swatchRow.querySelectorAll('.stl-swatch'));
+        var position = swatchRow.closest('[data-option-position]').getAttribute('data-option-position');
+
+        swatchButtons.forEach(function (btn, index) {
+          btn.addEventListener('click', function () {
+            swatchButtons.forEach(function (b) {
+              b.classList.remove('is-active');
+            });
+            btn.classList.add('is-active');
+            selected[position] = btn.getAttribute('data-value');
+            moveHighlight(btn);
+            updateAddButtonState();
+          });
+        });
+
+        function moveHighlight(btn) {
+          highlight.style.width = btn.offsetWidth + 'px';
+          highlight.style.transform = 'translateX(' + btn.offsetLeft + 'px)';
+        }
+      }
+
+      // ---- Size dropdown (custom state machine) ----
+      var sizeWrap = form.querySelector('[data-stl-size]');
+      if (sizeWrap) {
+        var toggle = sizeWrap.querySelector('[data-stl-size-toggle]');
+        var label = sizeWrap.querySelector('[data-stl-size-label]');
+        var list = sizeWrap.querySelector('[data-stl-size-list]');
+        var options = Array.prototype.slice.call(sizeWrap.querySelectorAll('.stl-size__option'));
+        var sizePosition = sizeWrap.closest('[data-option-position]').getAttribute('data-option-position');
+        var placeholder = label.textContent;
+        var committedValue = null;
+        var isOpen = false;
+
+        toggle.addEventListener('click', function (e) {
+          e.stopPropagation();
+          if (!isOpen) {
+            openList();
+          } else {
+            closeListAndReset();
+          }
+        });
+
+        options.forEach(function (opt) {
+          opt.addEventListener('click', function (e) {
+            e.stopPropagation();
+            committedValue = opt.getAttribute('data-value');
+            selected[sizePosition] = committedValue;
+            label.textContent = committedValue;
+            closeList();
+            updateAddButtonState();
+          });
+        });
+
+        document.addEventListener('click', function (e) {
+          if (isOpen && !sizeWrap.contains(e.target)) {
+            closeListAndReset();
+          }
+        });
+
+        function openList() {
+          isOpen = true;
+          sizeWrap.classList.add('is-open');
+          label.textContent = placeholder; // per spec: always shows placeholder while open
+        }
+
+        function closeList() {
+          isOpen = false;
+          sizeWrap.classList.remove('is-open');
+        }
+
+        function closeListAndReset() {
+          // closing without an explicit selection clears any prior committed value
+          committedValue = null;
+          delete selected[sizePosition];
+          label.textContent = placeholder;
+          closeList();
+          updateAddButtonState();
+        }
+      }
+
+      // ---- Generic (fallback) options, e.g. a 3rd option ----
+      var genericRows = form.querySelectorAll('[data-stl-generic]');
+      genericRows.forEach(function (row) {
+        var pos = row.closest('[data-option-position]').getAttribute('data-option-position');
+        var buttons = Array.prototype.slice.call(row.querySelectorAll('.stl-generic-option'));
+        buttons.forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            buttons.forEach(function (b) {
+              b.classList.remove('is-active');
+            });
+            btn.classList.add('is-active');
+            selected[pos] = btn.getAttribute('data-value');
+            updateAddButtonState();
+          });
+        });
+      });
+
+      var totalOptionGroups = form.querySelectorAll('[data-option-position]').length;
+      var addBtn = form.querySelector('[data-stl-add]');
+      var addLabel = form.querySelector('[data-stl-add-label]');
+      var message = form.querySelector('[data-stl-message]');
+      var defaultLabel = addLabel.textContent;
+
+      function updateAddButtonState() {
+        // purely visual — full validation happens on submit too
+        message.textContent = '';
+        message.className = 'stl-form__message';
+      }
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        var selectedCount = Object.keys(selected).length;
+        if (selectedCount < totalOptionGroups) {
+          message.textContent = 'Please select all options.';
+          message.className = 'stl-form__message is-error';
+          return;
+        }
+
+        var variant = variants.find(function (v) {
+          return (
+            (v.option1 === undefined || v.option1 === selected['1']) &&
+            (v.option2 === undefined || selected['2'] === undefined || v.option2 === selected['2']) &&
+            (v.option3 === undefined || selected['3'] === undefined || v.option3 === selected['3'])
+          );
+        });
+
+        if (!variant || !variant.available) {
+          message.textContent = 'That combination is unavailable.';
+          message.className = 'stl-form__message is-error';
+          return;
+        }
+
+        var items = [{ id: variant.id, quantity: 1 }];
+
+        var bonusId = form.getAttribute('data-bonus-id');
+        var bonusColor = form.getAttribute('data-bonus-color');
+        var bonusSize = form.getAttribute('data-bonus-size');
+
+        if (bonusId && bonusColor && bonusSize) {
+          var colorMatches = Object.values(selected).indexOf(bonusColor) !== -1;
+          var sizeMatches = Object.values(selected).indexOf(bonusSize) !== -1;
+          if (colorMatches && sizeMatches) {
+            items.push({ id: parseInt(bonusId, 10), quantity: 1 });
+          }
+        }
+
+        addBtn.disabled = true;
+        addLabel.textContent = 'Adding...';
+
+        fetch('/cart/add.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify({ items: items }),
+        })
+          .then(function (res) {
+            if (!res.ok)
+              return res.json().then(function (err) {
+                throw err;
+              });
+            return res.json();
+          })
+          .then(function () {
+            message.textContent = items.length > 1 ? 'Added to cart (bundle included).' : 'Added to cart.';
+            message.className = 'stl-form__message is-success';
+            document.dispatchEvent(new CustomEvent('cart:refresh'));
+            var drawer = document.querySelector('cart-drawer, cart-notification');
+            if (drawer && typeof drawer.open === 'function') drawer.open();
+            addBtn.disabled = false;
+            addLabel.textContent = defaultLabel;
+          })
+          .catch(function (err) {
+            message.textContent = (err && err.description) || 'Could not add to cart.';
+            message.className = 'stl-form__message is-error';
+            addBtn.disabled = false;
+            addLabel.textContent = defaultLabel;
+          });
+      });
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Shop the Look",
+  "tag": "section",
+  "class": "stl-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Shop the look"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "product",
+      "name": "Product",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        },
+        {
+          "type": "header",
+          "content": "Bundle rule"
+        },
+        {
+          "type": "product",
+          "id": "bonus_product",
+          "label": "Auto-add product",
+          "info": "Added to cart automatically when the matching color/size combo below is selected (e.g. Soft Winter Jacket)."
+        },
+        {
+          "type": "text",
+          "id": "bonus_trigger_color",
+          "label": "Trigger color value",
+          "default": "Black"
+        },
+        {
+          "type": "text",
+          "id": "bonus_trigger_size",
+          "label": "Trigger size value",
+          "default": "Medium"
+        },
+        {
+          "type": "header",
+          "content": "Plus icon position"
+        },
+        {
+          "type": "select",
+          "id": "icon_v_position",
+          "label": "Vertical anchor",
+          "options": [
+            { "value": "top", "label": "Top" },
+            { "value": "bottom", "label": "Bottom" }
+          ],
+          "default": "top"
+        },
+        {
+          "type": "range",
+          "id": "icon_v_offset",
+          "label": "Vertical offset",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 50
+        },
+        {
+          "type": "select",
+          "id": "icon_h_position",
+          "label": "Horizontal anchor",
+          "options": [
+            { "value": "left", "label": "Left" },
+            { "value": "right", "label": "Right" }
+          ],
+          "default": "left"
+        },
+        {
+          "type": "range",
+          "id": "icon_h_offset",
+          "label": "Horizontal offset",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 50
+        }
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "presets": [
+    {
+      "name": "Shop the Look",
+      "blocks": [
+        { "type": "product" },
+        { "type": "product" },
+        { "type": "product" },
+        { "type": "product" },
+        { "type": "product" },
+        { "type": "product" }
+      ]
+    }
+  ]
+}
+{% endschema %}
