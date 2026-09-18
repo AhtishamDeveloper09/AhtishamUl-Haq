@@ -88,14 +88,14 @@
         "button_text": "Shop Now",
         "button_link": "",
         "bottom_bar_text": "Sustainable, ethically made clothes in sizes XXS to 6XL",
-        "heading_color": "#1a1a1a",
-        "description_color": "#1a1a1a",
-        "button_background": "#1a1a1a",
+        "heading_color": "#000000",
+        "description_color": "#000000",
+        "button_background": "#000000",
         "button_text_color": "#ffffff",
-        "button_hover_background": "#f4e04d",
-        "button_hover_text_color": "#1a1a1a",
-        "bottom_bar_background": "#1a1a1a",
-        "bottom_bar_text_color": "#ffffff"
+        "button_hover_background": "#FFF544",
+        "button_hover_text_color": "#000000",
+        "bottom_bar_background": "#F5F5F5",
+        "bottom_bar_text_color": "#000000"
       }
     }
   },
