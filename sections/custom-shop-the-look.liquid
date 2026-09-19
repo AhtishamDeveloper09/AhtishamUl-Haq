@@ -198,6 +198,7 @@
 
   .stl-swatch.is-active {
     color: #fff;
+    background: #000000;
   }
 
   .stl-swatch__label {
@@ -426,7 +427,7 @@
 
                   {%- if option_name_down contains 'color' or option_name_down contains 'colour' -%}
                     <div class="stl-swatch-row" data-stl-swatches>
-                      <span class="stl-swatch-highlight" data-stl-highlight></span>
+                      {% comment %} <span class="stl-swatch-highlight" data-stl-highlight></span> {% endcomment %}
                       {%- for value in option.values -%}
                         <button type="button" class="stl-swatch" data-value="{{ value | escape }}">
                           <span class="stl-swatch__label">{{ value }}</span>
