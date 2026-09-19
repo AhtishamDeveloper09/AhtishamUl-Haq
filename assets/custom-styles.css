@@ -1,3 +1,14 @@
+@font-face {
+    font-family: 'Lustria';
+    src: url('https://cdn.shopify.com/s/files/1/0827/0318/8206/files/Lustria-Regular.eot?v=1789820361');
+    src: url('https://cdn.shopify.com/s/files/1/0827/0318/8206/files/Lustria-Regular.ttf?v=1789820361') format('embedded-truetype'),
+        url('https://cdn.shopify.com/s/files/1/0827/0318/8206/files/Lustria-Regular.woff2?v=1789820361') format('woff2'),
+        url('https://cdn.shopify.com/s/files/1/0827/0318/8206/files/Lustria-Regular.woff?v=1789820361') format('woff'),
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
 body{
     letter-spacing: 0 !important;
 }
