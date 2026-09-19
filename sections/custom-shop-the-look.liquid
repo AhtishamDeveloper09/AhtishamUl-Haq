@@ -360,7 +360,10 @@
             data-stl-open="stl-popup-{{ section.id }}-{{ forloop.index }}"
             aria-label="{{ 'products.product.choose_options' | t | default: 'View product options' }}"
           >
-            <span aria-hidden="true">+</span>
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4.98047 0.75V9.21154" stroke="black" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="round"/>
+              <path d="M0.75 4.98071H9.21154" stroke="black" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="round"/>
+            </svg>
           </button>
         {%- else -%}
           <div class="stl-card__img stl-card__img--placeholder"></div>
