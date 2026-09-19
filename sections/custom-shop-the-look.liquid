@@ -498,7 +498,7 @@
 
               <button type="submit" class="stl-add-to-cart" data-stl-add>
                 <span data-stl-add-label>{{ 'products.product.add_to_cart' | t | default: 'ADD TO CART' }}</span>
-                <span aria-hidden="true">&rarr;</span>
+                {{ 'arrow-icon.svg' | inline_asset_content }}
               </button>
               <p class="stl-form__message" data-stl-message role="status" aria-live="polite"></p>
             </form>
