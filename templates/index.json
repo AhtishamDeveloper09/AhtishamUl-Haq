@@ -135,9 +135,9 @@
             "bonus_trigger_color": "Black",
             "bonus_trigger_size": "M",
             "icon_v_position": "top",
-            "icon_v_offset": 50,
+            "icon_v_offset": 21,
             "icon_h_position": "left",
-            "icon_h_offset": 50
+            "icon_h_offset": 63
           }
         },
         "product_qC3tWM": {
