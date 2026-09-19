@@ -1,7 +1,6 @@
 {% style %}
   .stl-wrap {
     max-width: 100%;
-    margin: 0 auto;
     padding-top: {{ section.sttings.padding_top }};
     padding-bottom: {{ section.sttings.padding_bottom }};
     padding-inline: 50px;
@@ -349,7 +348,7 @@
               height="{{ product.featured_image.height }}"
             >
           {%- else -%}
-            <div class="stl-card__img stl-card__img--placeholder"></div>
+            <div class="stl-card__img stl-card__img--placeholder">&nbsp</div>
           {%- endif -%}
 
           <button
