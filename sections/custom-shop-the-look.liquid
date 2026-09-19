@@ -265,9 +265,11 @@
     padding: 0;
     border: 1px solid #000000;
     max-height: 0;
-    overflow: hidden;
+    overflow-y: scroll;
     opacity: 0;
     transition: max-height 0.28s ease, opacity 0.2s ease;
+    position: absolute;
+    width: 100%;
   }
 
   .stl-size.is-open .stl-size__list {
