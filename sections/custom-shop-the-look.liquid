@@ -2,7 +2,9 @@
   .stl-wrap {
     max-width: 100%;
     margin: 0 auto;
-    padding: 40px 20px;
+    padding-top: {{ section.sttings.padding_top }};
+    padding-bottom: {{ section.sttings.padding_bottom }};
+    padding-inline: 50px;
   }
 
   .stl-heading {
@@ -802,6 +804,26 @@
       "id": "heading",
       "label": "Heading",
       "default": "Shop the look"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 36
     }
   ],
   "blocks": [
