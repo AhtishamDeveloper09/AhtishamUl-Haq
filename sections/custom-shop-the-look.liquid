@@ -173,8 +173,8 @@
     left: 0;
     height: 100%;
     width: 0;
-    background: #111;
-    transition: transform 0.28s ease, width 0.28s ease;
+    background: #000000;
+    transition: transform 0.3s ease, width 0.3s ease;
     z-index: 0;
   }
 
@@ -185,11 +185,11 @@
     padding: 12px;
     background: transparent;
     border: none;
-    border-right: 1px solid #111;
+    border-right: 0.5px solid #000000;
     font-size: 13px;
     cursor: pointer;
-    color: #111;
-    transition: all 0.3s ease;
+    color: #000000;
+    transition: color 0.28s ease;
   }
 
   .stl-swatch:last-child {
@@ -198,7 +198,6 @@
 
   .stl-swatch.is-active {
     color: #fff;
-    background: #000000;
   }
 
   .stl-swatch__label {
@@ -427,7 +426,7 @@
 
                   {%- if option_name_down contains 'color' or option_name_down contains 'colour' -%}
                     <div class="stl-swatch-row" data-stl-swatches>
-                      {% comment %} <span class="stl-swatch-highlight" data-stl-highlight></span> {% endcomment %}
+                      <span class="stl-swatch-highlight" data-stl-highlight></span>
                       {%- for value in option.values -%}
                         <button type="button" class="stl-swatch" data-value="{{ value | escape }}">
                           <span class="stl-swatch__label">{{ value }}</span>
