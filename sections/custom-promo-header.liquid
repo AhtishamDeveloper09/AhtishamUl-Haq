@@ -280,7 +280,7 @@
   /* ==========================================================
      Breakpoint: show desktop layout, hide mobile toggle/drawer
      ========================================================== */
-  @media screen and (min-width: 750px) {
+  @media screen and (min-width: 769px) {
     #PromoBar-{{ section_id }} .promo-bar__message--desktop,
     #PromoBar-{{ section_id }} .promo-bar__button--desktop {
       display: flex;
@@ -293,7 +293,7 @@
   }
 
   /* Below the breakpoint, show the mobile toggle + drawer */
-  @media screen and (max-width: 749px) {
+  @media screen and (max-width: 768px) {
     #PromoBar-{{ section_id }} .promo-bar__row {
       flex-direction: row-reverse;
     }
