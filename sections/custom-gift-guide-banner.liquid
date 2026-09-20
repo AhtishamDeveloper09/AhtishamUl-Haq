@@ -128,6 +128,11 @@
       <p class="gift-guide-banner__bottom-bar-text">{{ section.settings.bottom_bar_text }}</p>
     </div>
   {%- endif -%}
+  {%- if section.settings.bottom_bar_text_mobile != blank -%}
+    <div class="gift-guide-banner__bottom-bar bottom-text-mobile">
+      <p class="gift-guide-banner__bottom-bar-text">{{ section.settings.bottom_bar_text_mobile }}</p>
+    </div>
+  {%- endif -%}
 </div>
 
 {%- style -%}
@@ -267,6 +272,10 @@
     #GiftGuideBanner-{{ section_id }} .gift-guide-banner__text {
       max-width: 48rem;
       text-align: left;
+    }
+
+    #GiftGuideBanner-{{ section_id }} .gift-guide-banner__bottom-bar-text.bottom-text-mobile{
+      display: none;
     }
   }
 
