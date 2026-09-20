@@ -565,14 +565,7 @@
 <script>
   (function () {
     'use strict';
-
-    // Manually refresh Dawn's cart drawer instead of relying on the theme's own
-    // getSectionsToRender()/renderContents() — those depend on internal DOM-id
-    // vs section-id mappings we can't see from here, and were the reason the
-    // drawer kept showing stale/empty content. This fetches the cart-drawer
-    // section straight from Shopify's Section Rendering API (always accurate,
-    // since it reads the real cart cookie server-side) and swaps Dawn's stable
-    // ".drawer__inner" markup in by hand.
+    
     function refreshCartDrawer() {
       var liveDrawer = document.querySelector('cart-drawer');
       if (!liveDrawer) return Promise.resolve();
