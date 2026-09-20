@@ -13,12 +13,6 @@
             overlaid on top of the image near its bottom edge — this
             reproduces the large visual "gap" between the text and
             the button that the reference design has on mobile.
-
-  Note: the section is intentionally split into two separate markup
-  blocks (desktop vs. mobile media/button) rather than one block
-  repositioned with CSS, because the mobile layout changes *document
-  order* (image sits between description and button), not just
-  position — that can't be done with a single reflowed element.
 {%- endcomment -%}
 
 {%- liquid
