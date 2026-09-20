@@ -83,6 +83,7 @@
       "name": "Gift Guide Banner",
       "settings": {
         "image": "shopify://shop_images/Group_1000008197.png",
+        "mobile_image": "shopify://shop_images/Frame.png",
         "heading": "The Gift Guide",
         "description": "<p>Discover Joy: Your Ultimate Holiday Gift Destination. </p><p>Explore our curated selection and find the perfect gifts to delight your loved ones this holiday season.</p>",
         "button_text": "Shop Now",
