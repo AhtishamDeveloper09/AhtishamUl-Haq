@@ -85,9 +85,7 @@
   </div>
 
   {%- comment -%}
-    Mobile drawer. Uses the CSS grid-template-rows "0fr -> 1fr" trick
-    so the slide-open/close animation is smooth without JS having to
-    measure/set pixel heights.
+    Mobile drawer
   {%- endcomment -%}
   <div class="promo-bar__drawer" id="PromoBarDrawer-{{ section_id }}">
     <div class="promo-bar__drawer-inner">
@@ -347,12 +345,6 @@
 {%- endstyle -%}
 
 <script>
-  /**
-   * Promo Announcement Bar — mobile drawer toggle.
-   * Scoped to this section instance only (by section id) so multiple
-   * instances on a page, or re-renders from the theme editor, never
-   * clash or double-bind.
-   */
   (function () {
     var sectionId = {{ section_id | json }};
     var toggle = document.getElementById('PromoBarToggle-' + sectionId);
