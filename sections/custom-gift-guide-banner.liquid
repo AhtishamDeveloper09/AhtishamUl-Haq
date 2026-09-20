@@ -124,7 +124,7 @@
 
   {%- comment -%} Thin schema-driven text bar under the banner {%- endcomment -%}
   {%- if section.settings.bottom_bar_text != blank -%}
-    <div class="gift-guide-banner__bottom-bar">
+    <div class="gift-guide-banner__bottom-bar bottom-text-desktop">
       <p class="gift-guide-banner__bottom-bar-text">{{ section.settings.bottom_bar_text }}</p>
     </div>
   {%- endif -%}
@@ -274,7 +274,7 @@
       text-align: left;
     }
 
-    #GiftGuideBanner-{{ section_id }} .gift-guide-banner__bottom-bar-text.bottom-text-mobile{
+    #GiftGuideBanner-{{ section_id }} .gift-guide-banner__bottom-bar.bottom-text-mobile{
       display: none;
     }
   }
@@ -363,6 +363,10 @@
 
     #GiftGuideBanner-{{ section_id }} .gift-guide-banner__bottom-bar-text {
       font-size: 14px;
+    }
+
+    #GiftGuideBanner-{{ section_id }} .gift-guide-banner__bottom-bar.bottom-text-desktop{
+      display: block;
     }
   }
 {%- endstyle -%}
